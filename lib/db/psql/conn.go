@@ -1,6 +1,11 @@
 package psql
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+
+	_ "github.com/lib/pq"
+)
 
 var conn *sql.DB
 
@@ -16,6 +21,7 @@ func Open(host string) error {
 	}
 
 	conn = db
+	log.Println("postgresql connected")
 
 	return nil
 }
@@ -25,6 +31,7 @@ func Close() error {
 	if err := conn.Close(); err != nil {
 		return err
 	}
+
 	conn = nil
 	return nil
 }

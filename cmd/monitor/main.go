@@ -4,8 +4,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
+	_ "github.com/onkiit/db-monitor/controller/postgres"
+	_ "github.com/onkiit/db-monitor/controller/redis"
 	"github.com/onkiit/db-monitor/lib/db/psql"
 	"github.com/onkiit/db-monitor/lib/db/redis"
+	"github.com/onkiit/db-monitor/registry"
 )
 
 func openConnection() {
@@ -33,8 +37,18 @@ func closeConnection() {
 }
 
 func run() {
-	log.Println("Server starting at port 8081")
-	http.ListenAndServe(":8081", logger())
+	r := mux.NewRouter()
+	for _, router := range registry.Router() {
+		router.RegisterRoute(r)
+	}
+
+	serve := &http.Server{
+		Addr:    "127.0.0.1:8180",
+		Handler: r,
+	}
+
+	log.Println("Server starting at port 8180")
+	log.Fatal(serve.ListenAndServe())
 }
 
 func main() {

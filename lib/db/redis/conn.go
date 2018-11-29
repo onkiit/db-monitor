@@ -2,6 +2,7 @@ package redis
 
 import (
 	"errors"
+	"log"
 
 	"github.com/gomodule/redigo/redis"
 )
@@ -23,6 +24,7 @@ func Connect(host string) error {
 	}
 
 	conn = c
+	log.Println("redis connected")
 
 	return nil
 }

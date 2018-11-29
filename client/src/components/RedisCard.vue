@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card height="250">
         <v-card-title>
             <span class="title">Redis</span>
         </v-card-title>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data(){
         return{
@@ -34,14 +35,14 @@ export default {
         }
     },
     created(){
-        this.getData()
+        this.getVersion()
     },
     methods: {
-        getData(){
-            fetch("http://localhost:8180/getredis")
-            .then(resp => {
-                console.log(resp)
-                this.monitoringData = resp.data
+        getVersion(){
+            axios.get("http://127.0.0.1:8180/redis/version")
+            .then(({data}) => {
+                console.log(data)
+                this.monitoringData = data
             })
         }
     }

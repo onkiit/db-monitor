@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/onkiit/db-monitor/api"
 	"github.com/onkiit/db-monitor/lib/db/psql"
@@ -23,8 +23,14 @@ func (p postgres) GetVersion() (*api.DBVersion, error) {
 }
 
 func (p postgres) GetActiveClient() (*api.DBActiveClient, error) {
-	log.Println("From postgresql")
-	return nil, nil
+	con := psql.DB()
+	var c api.DBActiveClient
+	err := con.QueryRow("SELECT count(0) as active_client FROM pg_stat_activity where state='active' ").Scan(&c.ActiveClient)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return &c, nil
 }
 
 func (p postgres) GetHealth() (*api.DBHealth, error) {

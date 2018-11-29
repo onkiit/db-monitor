@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card height="250">
         <v-card-title>
             <span class="title">MySQL</span>
         </v-card-title>
@@ -37,7 +37,6 @@ export default {
         }
     },
     created(){
-        this.monitoringData.version = "PostgreSQL version 3"
     },
     methods: {
         

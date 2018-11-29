@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card height="250">
         <v-card-title>
             <span class="title">Mongo</span>
         </v-card-title>
@@ -34,7 +34,7 @@ export default {
         }
     },
     created(){
-        this.getData()
+        // this.getData()
     },
     methods: {
         getData(){

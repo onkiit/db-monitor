@@ -1,7 +1,7 @@
 <template>
-    <v-card>
+    <v-card height="250">
         <v-card-title>
-            <span class="title">Redis</span>
+            <span class="title">PostgreSQL</span>
         </v-card-title>
         <v-card-text>
            <v-layout row wrap>
@@ -18,7 +18,7 @@
                         <span class="body-2">Active Clients</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption">{{ monitoringData.active_client }}</span>
+                        <span class="caption"><strong>{{ monitoringData.active_client }}</strong> {{monitoringData.active_client > 2 ? "Active clients": "Active client"}}</span>
                     </v-flex>
                 </v-flex>
             </v-layout>
@@ -27,21 +27,33 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data(){
         return{
-            monitoringData: {}
+            monitoringData: {
+                version: "",
+                active_client: 0
+            }
         }
     },
     created(){
-        this.getData()
+        this.getVersion()
+        this.getActiveClient()
     },
     methods: {
-        getData(){
-            fetch("http://localhost:8180/getredis")
-            .then(resp => {
-                console.log(resp)
-                this.monitoringData = resp.data
+        getVersion(){
+            axios.get("http://127.0.0.1:8180/postgres/version")
+            .then(({data}) => {
+                console.log(data)
+                this.monitoringData.version = data.version
+            })
+        },
+        getActiveClient(){
+            axios.get("http://127.0.0.1:8180/postgres/client")
+            .then(({data}) => {
+                console.log(data)
+                this.monitoringData.active_client = data.active_client
             })
         }
     }

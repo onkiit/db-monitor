@@ -1,17 +1,17 @@
 <template>
   <v-container fluid grid-list-xs>
-    <v-layout row wrap>
-      <v-flex xs6 xl6>
+    <v-layout row wrap align-content-center justify-center>
+      <v-flex xs4 xl4 class="">
         <psql-card/>
       </v-flex>
-      <v-flex xs6 xl6>
-        <mysql-card />
+      <v-flex xs4 xl4 class="ml-1">
+        <redis-card />
       </v-flex>
-      <v-flex xs6 xl6 class="mt-2">
+      <v-flex xs4 xl4>
         <mongo-card/>
       </v-flex>
-      <v-flex xs6 xl6 class="mt-2">
-        <redis-card />
+      <v-flex xs4 xl4 class="ml-1">
+        <mysql-card />
       </v-flex>
     </v-layout>
   </v-container>

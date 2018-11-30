@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
     data(){
         return{
@@ -43,13 +42,13 @@ export default {
     },
     methods: {
         getVersion(){
-            axios.get("http://127.0.0.1:8180/postgres/version")
+            this.$http.get("http://127.0.0.1:8180/postgres/version")
             .then(({data}) => {
                 this.monitoringData.version = data.version
             })
         },
         getActiveClient(){
-            axios.get("http://127.0.0.1:8180/postgres/client")
+            this.$http.get("http://127.0.0.1:8180/postgres/client")
             .then(({data}) => {
                 this.monitoringData.active_client = data.active_client
             })

@@ -18,7 +18,7 @@
                         <span class="body-2">Active Clients</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption">{{ monitoringData.active_client }}</span>
+                        <span class="caption"><strong>{{ monitoringData.active_client }}</strong> {{monitoringData.active_client > 2 ? "Active clients": "Active client"}}</span>
                     </v-flex>
                 </v-flex>
             </v-layout>
@@ -30,20 +30,27 @@
 export default {
     data(){
         return{
-            monitoringData: {}
+            monitoringData: {
+                version: "",
+                active_client: 0
+            }
         }
     },
     created(){
-        // this.getData()
+        this.getVersion(),
+        this.getActiveClient()
     },
     methods: {
-        getData(){
-            fetch("http://localhost:8180/getmongo")
-            .then(resp => {
-                console.log(resp)
+        getVersion(){
+            this.$http.get("http://127.0.0.1:8180/mongo/version")
+            .then(({ data }) => {
+                this.monitoringData.version = data.version
             })
-            .catch(err => {
-                console.log(err)
+        },
+        getActiveClient(){
+            this.$http.get("http://127.0.0.1:8180/mongo/client")
+            .then(({ data }) => {
+                this.monitoringData.active_client = data.active_client
             })
         }
     }

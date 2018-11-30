@@ -18,7 +18,7 @@
                         <span class="body-2">Active Clients</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption">{{ monitoringData.active_client }}</span>
+                        <span class="caption"><strong>{{ monitoringData.active_client }}</strong> {{monitoringData.active_client > 2 ? "Active clients": "Active client"}}</span>
                     </v-flex>
                 </v-flex>
             </v-layout>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
     data(){
         return{
@@ -43,13 +42,13 @@ export default {
     },
     methods: {
         getVersion(){
-            axios.get("http://127.0.0.1:8180/redis/version")
+            this.$http.get("http://127.0.0.1:8180/redis/version")
             .then(({data}) => {
                 this.monitoringData.version = data.version
             })
         },
         getActiveClient(){
-            axios.get("http://127.0.0.1:8180/redis/client")
+            this.$http.get("http://127.0.0.1:8180/redis/client")
             .then(({data}) => {
                 this.monitoringData.active_client = data.active_client
             })

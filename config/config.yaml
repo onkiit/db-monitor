@@ -1,0 +1,17 @@
+---
+server:
+  host: "127.0.0.1:8180"
+  database:
+    postgres:
+      uri: "postgresql://postgres:postgres@localhost/Coba"
+    redis:
+      uri: "localhost:6379"
+    mongo: 
+      uri: "localhost:27017"
+
+client:
+  host: "127.0.0.1:8080"
+  allowed_cors:
+    - "http://localhost:8080"
+    - "http://127.0.0.1:8080"
+---

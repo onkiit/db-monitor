@@ -5,7 +5,6 @@ import (
 
 	"github.com/onkiit/db-monitor/api"
 	"github.com/onkiit/db-monitor/lib/db/psql"
-	"github.com/onkiit/db-monitor/registry"
 )
 
 type postgres struct{}
@@ -39,8 +38,4 @@ func (p postgres) GetHealth() (*api.DBHealth, error) {
 
 func New() api.Store {
 	return postgres{}
-}
-
-func init() {
-	registry.RegisterModel("postgres", New())
 }

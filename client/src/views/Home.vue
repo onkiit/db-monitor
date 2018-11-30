@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid grid-list-xs>
+  <v-container fluid grid-list-xs >
     <v-layout row wrap align-content-center justify-center>
       <v-flex xs4 xl4 class="">
         <psql-card/>

@@ -7,7 +7,7 @@ import (
 	"github.com/gomodule/redigo/redis"
 )
 
-var conn redis.Conn
+var conn *redis.Pool
 
 func Connect(host string) error {
 	pool := &redis.Pool{
@@ -23,7 +23,7 @@ func Connect(host string) error {
 		return errors.New("Unable to connect with redis.")
 	}
 
-	conn = c
+	conn = pool
 	log.Println("redis connected")
 
 	return nil
@@ -37,6 +37,6 @@ func Close() error {
 	return nil
 }
 
-func Dial() redis.Conn {
+func Dial() *redis.Pool {
 	return conn
 }

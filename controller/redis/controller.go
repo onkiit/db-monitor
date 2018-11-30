@@ -21,3 +21,13 @@ func (c *Controller) GetVersion(w http.ResponseWriter, r *http.Request) {
 
 	helper.RespondWithJSON(w, http.StatusOK, v)
 }
+
+func (c *Controller) GetActiveClient(w http.ResponseWriter, r *http.Request) {
+	cl, err := c.store.GetActiveClient()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	helper.RespondWithJSON(w, http.StatusOK, cl)
+}

@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/onkiit/db-monitor/api"
@@ -32,25 +33,19 @@ func getString(info string, prefix string) (string, error) {
 	return text, nil
 }
 
-func (r rediss) redisDoString(command string, args ...interface{}) (string, error) {
-	con := redis.Dial()
-	info, err := redigo.String(con.Do(command, args...))
-	if err != nil {
-		return "", err
-	}
-	return info, nil
-}
-
 func getValue(str string) string {
 	split := strings.Split(str, ":")
 	return split[1]
 }
 
 func (r rediss) GetVersion() (*api.DBVersion, error) {
-	info, err := r.redisDoString("INFO", "SERVER")
+	con := redis.Dial().Get()
+	info, err := redigo.String(con.Do("INFO", "SERVER"))
 	if err != nil {
 		return nil, err
 	}
+
+	defer con.Close()
 
 	strVersion, err := getString(info, "redis_version")
 	if err != nil {
@@ -81,7 +76,28 @@ func (r rediss) GetVersion() (*api.DBVersion, error) {
 }
 
 func (r rediss) GetActiveClient() (*api.DBActiveClient, error) {
-	return nil, nil
+	con := redis.Dial().Get()
+	info, err := redigo.String(con.Do("INFO", "CLIENTS"))
+	if err != nil {
+		return nil, err
+	}
+
+	defer con.Close()
+
+	str, err := getString(info, "connected_clients")
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := strconv.ParseInt(getValue(str), 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &api.DBActiveClient{
+		ActiveClient: int(client),
+	}
+	return res, nil
 }
 
 func (r rediss) GetHealth() (*api.DBHealth, error) {

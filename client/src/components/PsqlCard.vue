@@ -45,14 +45,12 @@ export default {
         getVersion(){
             axios.get("http://127.0.0.1:8180/postgres/version")
             .then(({data}) => {
-                console.log(data)
                 this.monitoringData.version = data.version
             })
         },
         getActiveClient(){
             axios.get("http://127.0.0.1:8180/postgres/client")
             .then(({data}) => {
-                console.log(data)
                 this.monitoringData.active_client = data.active_client
             })
         }

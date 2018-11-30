@@ -31,18 +31,27 @@ import axios from 'axios'
 export default {
     data(){
         return{
-            monitoringData: {}
+            monitoringData: {
+                version: "",
+                active_client: 0
+            }
         }
     },
     created(){
         this.getVersion()
+        this.getActiveClient()
     },
     methods: {
         getVersion(){
             axios.get("http://127.0.0.1:8180/redis/version")
             .then(({data}) => {
-                console.log(data)
-                this.monitoringData = data
+                this.monitoringData.version = data.version
+            })
+        },
+        getActiveClient(){
+            axios.get("http://127.0.0.1:8180/redis/client")
+            .then(({data}) => {
+                this.monitoringData.active_client = data.active_client
             })
         }
     }

@@ -51,7 +51,7 @@ func run() {
 
 	//enable cors
 	headers := handlers.AllowedHeaders([]string{"Accept", "Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"})
-	origins := handlers.AllowedOrigins([]string{"http://127.0.0.1:8080"})
+	origins := handlers.AllowedOrigins([]string{"http://127.0.0.1:8080", "http://localhost:8080"})
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 	//register router

@@ -10,6 +10,7 @@ import (
 func (c *Controller) RegisterRoute(r *mux.Router) {
 	s := r.PathPrefix("/redis").Subrouter()
 	s.HandleFunc("/version", c.GetVersion)
+	s.HandleFunc("/client", c.GetActiveClient)
 }
 
 func New() api.Router {

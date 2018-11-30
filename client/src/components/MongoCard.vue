@@ -42,13 +42,13 @@ export default {
     },
     methods: {
         getVersion(){
-            this.$http.get("http://127.0.0.1:8180/mongo/version")
+            this.$http.get("/mongo/version")
             .then(({ data }) => {
                 this.monitoringData.version = data.version
             })
         },
         getActiveClient(){
-            this.$http.get("http://127.0.0.1:8180/mongo/client")
+            this.$http.get("/mongo/client")
             .then(({ data }) => {
                 this.monitoringData.active_client = data.active_client
             })

@@ -42,13 +42,13 @@ export default {
     },
     methods: {
         getVersion(){
-            this.$http.get("http://127.0.0.1:8180/postgres/version")
+            this.$http.get("/postgres/version")
             .then(({data}) => {
                 this.monitoringData.version = data.version
             })
         },
         getActiveClient(){
-            this.$http.get("http://127.0.0.1:8180/postgres/client")
+            this.$http.get("/postgres/client")
             .then(({data}) => {
                 this.monitoringData.active_client = data.active_client
             })

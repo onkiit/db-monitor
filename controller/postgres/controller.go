@@ -1,4 +1,4 @@
-package version
+package postgres
 
 import (
 	"log"

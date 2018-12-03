@@ -57,7 +57,6 @@ func closeConnection() {
 }
 
 func initConfig() {
-	viper.SetConfigName("config")
 	viper.AddConfigPath("../../config")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Println(err)
@@ -101,13 +100,14 @@ func run() {
 	log.Println("Server starting at port 8180")
 
 	stop := make(chan os.Signal)
-	//set notification to stop if Interrupt signal (syscall,SIGINT) received
+	//set notification to stop if Interrupt signal (syscall.SIGINT) received
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGSTOP)
 	<-stop
 
 	closeConnection()
 
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 	if err := serve.Shutdown(ctx); err != nil {
 		log.Println(err)
 		panic(err)

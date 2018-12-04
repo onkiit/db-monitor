@@ -57,6 +57,7 @@ func closeConnection() {
 }
 
 func initConfig() {
+	//load config file and set into a struct
 	viper.AddConfigPath("../../config")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Println(err)
@@ -106,6 +107,7 @@ func run() {
 
 	closeConnection()
 
+	log.Println("Shutting down server...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := serve.Shutdown(ctx); err != nil {

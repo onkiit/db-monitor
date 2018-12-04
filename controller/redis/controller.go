@@ -31,3 +31,13 @@ func (c *Controller) GetActiveClient(w http.ResponseWriter, r *http.Request) {
 
 	helper.RespondWithJSON(w, http.StatusOK, cl)
 }
+
+func (c *Controller) GetHealth(w http.ResponseWriter, r *http.Request) {
+	h, err := c.store.GetHealth()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	helper.RespondWithJSON(w, http.StatusOK, h)
+}

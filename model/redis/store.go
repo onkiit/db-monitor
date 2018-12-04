@@ -100,8 +100,101 @@ func (r rediss) GetActiveClient() (*api.DBActiveClient, error) {
 	return res, nil
 }
 
+func getUsage(info string) (string, error) {
+	str, err := getString(info, "used_memory")
+	if err != nil {
+		return "", err
+	}
+
+	usage := getValue(str)
+	return usage, nil
+}
+
+func getKeys(info string) ([]string, error) {
+	strExpired, err := getString(info, "expired_keys")
+	if err != nil {
+		return nil, err
+	}
+
+	strEvicted, err := getString(info, "evicted_keys")
+	if err != nil {
+		return nil, err
+	}
+
+	exp := getValue(strExpired)
+	evi := getValue(strEvicted)
+	return []string{exp, evi}, nil
+}
+
+func (r rediss) getSlowlogCount(con redigo.Conn) (int, error) {
+	count, err := redigo.Int(con.Do("SLOWLOG", "LEN"))
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (r rediss) getMemoryStats(con redigo.Conn) ([]interface{}, error) {
+	stats, err := redigo.Values(con.Do("MEMORY", "STATS"))
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	return stats, nil
+}
+
 func (r rediss) GetHealth() (*api.DBHealth, error) {
-	return nil, nil
+	con := redis.Dial().Get()
+
+	defer con.Close()
+
+	size, err := redigo.Int(con.Do("DBSIZE"))
+	if err != nil {
+		return nil, err
+	}
+
+	info, err := redigo.String(con.Do("INFO"))
+	if err != nil {
+		return nil, err
+	}
+	usage, err := getUsage(info)
+	if err != nil {
+		return nil, err
+	}
+
+	keys, err := getKeys(info)
+	if err != nil {
+		return nil, err
+	}
+
+	countLog, err := r.getSlowlogCount(con)
+	if err != nil {
+		return nil, err
+	}
+
+	stats, err := r.getMemoryStats(con)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &api.DBHealth{
+		RedisHealth: api.RedisHealth{
+			AvailableKey: size,
+			ExpiredKeys:  keys[0],
+			EvictedKeys:  keys[1],
+			MemoryUsage:  usage,
+			SlowlogCount: countLog,
+			MemoryStats: api.MemoryStats{
+				PeakAllocated:    stats[1].(int64),
+				TotalAllowed:     stats[3].(int64),
+				StartupAllocated: stats[5].(int64),
+				PeakPercentage:   0,
+				Fragmentation:    0,
+			},
+		},
+	}
+	return res, nil
 }
 
 func New() api.Store {

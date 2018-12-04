@@ -2,6 +2,8 @@
     <v-card height="250">
         <v-card-title>
             <span class="title">Redis</span>
+            <v-spacer></v-spacer>
+            <v-icon color="primary" @click="modal()">info</v-icon>
         </v-card-title>
         <v-card-text>
            <v-layout row wrap>
@@ -33,12 +35,13 @@ export default {
             monitoringData: {
                 version: "",
                 active_client: 0
-            }
+            },
         }
     },
     created(){
         this.getVersion()
         this.getActiveClient()
+        this.$store.dispatch("setRedisHealth")
     },
     methods: {
         getVersion(){
@@ -52,6 +55,11 @@ export default {
             .then(({data}) => {
                 this.monitoringData.active_client = data.active_client
             })
+        },
+        modal(){
+            this.$store.commit("setModal", true)
+            this.$store.commit("setModalTitle", "Redis Health Information")
+            this.$store.commit("setModalCaller", "redis")
         }
     }
 }

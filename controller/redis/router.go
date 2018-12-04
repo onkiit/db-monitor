@@ -9,9 +9,9 @@ import (
 
 func (c *Controller) RegisterRoute(r *mux.Router) {
 	s := r.PathPrefix("/redis").Subrouter()
-	s.HandleFunc("/version", c.GetVersion)
-	s.HandleFunc("/client", c.GetActiveClient)
-	s.HandleFunc("/health", c.GetHealth)
+	s.HandleFunc("/version", c.GetVersion).Methods("GET")
+	s.HandleFunc("/client", c.GetActiveClient).Methods("GET")
+	s.HandleFunc("/health", c.GetHealth).Methods("GET")
 }
 
 func New() api.Router {

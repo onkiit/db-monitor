@@ -86,9 +86,11 @@ func run() {
 		router.RegisterRoute(r)
 	}
 
+	logger := handlers.LoggingHandler(os.Stdout, r)
+
 	serve := &http.Server{
 		Addr:    config.C().Server.Host,
-		Handler: handlers.CORS(origins, headers, methods)(r),
+		Handler: handlers.CORS(origins, headers, methods)(logger),
 	}
 
 	go func() {

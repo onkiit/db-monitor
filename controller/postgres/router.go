@@ -9,8 +9,9 @@ import (
 
 func (c *Controller) RegisterRoute(r *mux.Router) {
 	v := r.PathPrefix("/postgres").Subrouter()
-	v.HandleFunc("/version", c.GetPostgresVersion)
-	v.HandleFunc("/client", c.GetActiveClient)
+	v.HandleFunc("/version", c.GetPostgresVersion).Methods("GET")
+	v.HandleFunc("/client", c.GetActiveClient).Methods("GET")
+	v.HandleFunc("/health", c.GetHealth).Methods("GET")
 }
 
 func New() api.Router {

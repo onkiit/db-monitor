@@ -1,6 +1,7 @@
 package mongo
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/globalsign/mgo/bson"
@@ -10,7 +11,7 @@ import (
 
 type mongo struct{}
 
-func (m mongo) GetVersion() (*api.DBVersion, error) {
+func (m mongo) GetVersion(ctx context.Context) (*api.DBVersion, error) {
 	session := mgo.Session()
 
 	info, err := session.BuildInfo()
@@ -25,7 +26,7 @@ func (m mongo) GetVersion() (*api.DBVersion, error) {
 	return res, nil
 }
 
-func (m mongo) GetActiveClient() (*api.DBActiveClient, error) {
+func (m mongo) GetActiveClient(ctx context.Context) (*api.DBActiveClient, error) {
 	session := mgo.Session()
 
 	var b bson.M
@@ -41,7 +42,8 @@ func (m mongo) GetActiveClient() (*api.DBActiveClient, error) {
 	return res, nil
 }
 
-func (m mongo) GetHealth() (*api.DBHealth, error) {
+func (m mongo) GetHealth(ctx context.Context) (*api.DBHealth, error) {
+
 	return nil, nil
 }
 

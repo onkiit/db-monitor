@@ -1,9 +1,13 @@
 package api
 
+import (
+	"context"
+)
+
 type Store interface {
-	GetVersion() (*DBVersion, error)
-	GetActiveClient() (*DBActiveClient, error)
-	GetHealth() (*DBHealth, error)
+	GetVersion(context.Context) (*DBVersion, error)
+	GetActiveClient(context.Context) (*DBActiveClient, error)
+	GetHealth(context.Context) (*DBHealth, error)
 }
 
 type DBVersion struct {
@@ -26,13 +30,14 @@ type PsqlHealth struct {
 
 type DBInformation struct {
 	DBName string `json:"db_name,omitempty"`
-	DBSize int    `json:"db_size,omitempty"`
+	DBSize string `json:"db_size,omitempty"`
 }
 
 type TableInformation struct {
 	SchemaName string `json:"schema_name,omitempty"`
 	TableName  string `json:"table_name,omitempty"`
-	TableSize  int    `json:"table_size,omitempty"`
+	TableSize  string `json:"table_size,omitempty"`
+	IndexSize  string `json:"index_size,omitempty"`
 }
 
 type RedisHealth struct {

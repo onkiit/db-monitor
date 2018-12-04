@@ -2,6 +2,8 @@
     <v-card height="250">
         <v-card-title>
             <span class="title">Mongo</span>
+            <v-spacer></v-spacer>
+            <v-icon @click="modal()" color="primary">info</v-icon>
         </v-card-title>
         <v-card-text>
             <v-layout row wrap>
@@ -52,6 +54,11 @@ export default {
             .then(({ data }) => {
                 this.monitoringData.active_client = data.active_client
             })
+        },
+        modal(){
+            this.$store.commit('setModal', true)
+            this.$store.commit('setModalTitle', 'Mongo Health Information')
+            this.$store.commit('setModalCaller', 'mongo')
         }
     }
 }

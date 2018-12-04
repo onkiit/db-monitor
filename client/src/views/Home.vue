@@ -30,7 +30,7 @@
             <redis-modal></redis-modal>
           </div>
           <div v-else-if="caller=='postgres'">
-
+            <psql-modal></psql-modal>
           </div>
           <div v-else>
 
@@ -52,13 +52,16 @@
   import RedisCard from '../components/card/RedisCard'
   
   import RedisModal from '../components/modal_content/RedisModal'
+  import PsqlModal from '../components/modal_content/PsqlModal'
   export default {
     components: {
       PsqlCard,
       MysqlCard,
       MongoCard,
       RedisCard,
-      RedisModal
+
+      RedisModal,
+      PsqlModal
     },
     data(){
       return {

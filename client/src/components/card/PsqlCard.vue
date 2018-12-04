@@ -2,6 +2,8 @@
     <v-card height="250">
         <v-card-title>
             <span class="title">PostgreSQL</span>
+            <v-spacer></v-spacer>
+            <v-icon color="primary" @click="modal()">info</v-icon>
         </v-card-title>
         <v-card-text>
            <v-layout row wrap>
@@ -39,6 +41,7 @@ export default {
     created(){
         this.getVersion()
         this.getActiveClient()
+        this.$store.dispatch('setPsqlHealth')
     },
     methods: {
         getVersion(){
@@ -52,6 +55,11 @@ export default {
             .then(({data}) => {
                 this.monitoringData.active_client = data.active_client
             })
+        },
+        modal(){
+            this.$store.commit('setModal', true)
+            this.$store.commit('setModalTitle', 'Postgres Health Information')
+            this.$store.commit('setModalCaller', 'postgres')
         }
     }
 }

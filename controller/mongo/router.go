@@ -9,8 +9,9 @@ import (
 
 func (c *Controller) RegisterRoute(r *mux.Router) {
 	m := r.PathPrefix("/mongo").Subrouter()
-	m.HandleFunc("/version", c.GetVersion)
-	m.HandleFunc("/client", c.GetActiveClient)
+	m.HandleFunc("/version", c.GetVersion).Methods("GET")
+	m.HandleFunc("/client", c.GetActiveClient).Methods("GET")
+	m.HandleFunc("/health", c.GetHealth).Methods("GET")
 }
 
 func New() api.Router {

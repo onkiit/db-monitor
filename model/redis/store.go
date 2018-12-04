@@ -3,6 +3,7 @@ package redis
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -38,7 +39,7 @@ func getValue(str string) string {
 	return split[1]
 }
 
-func (r rediss) GetVersion() (*api.DBVersion, error) {
+func (r rediss) GetVersion(ctx context.Context) (*api.DBVersion, error) {
 	con := redis.Dial().Get()
 	info, err := redigo.String(con.Do("INFO", "SERVER"))
 	if err != nil {
@@ -75,7 +76,7 @@ func (r rediss) GetVersion() (*api.DBVersion, error) {
 	return res, nil
 }
 
-func (r rediss) GetActiveClient() (*api.DBActiveClient, error) {
+func (r rediss) GetActiveClient(ctx context.Context) (*api.DBActiveClient, error) {
 	con := redis.Dial().Get()
 	info, err := redigo.String(con.Do("INFO", "CLIENTS"))
 	if err != nil {
@@ -144,7 +145,7 @@ func (r rediss) getMemoryStats(con redigo.Conn) ([]interface{}, error) {
 	return stats, nil
 }
 
-func (r rediss) GetHealth() (*api.DBHealth, error) {
+func (r rediss) GetHealth(ctx context.Context) (*api.DBHealth, error) {
 	con := redis.Dial().Get()
 
 	defer con.Close()

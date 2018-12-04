@@ -9,13 +9,17 @@ export default new Vuex.Store({
     modal: false,
     modalTitle: "",
     modalCaller: "",
-    redisHealth: {}
+    redisHealth: {},
+    psqlHealth: {},
+    mongoHealth: {}
   },
   getters: {
     modal: state => state.modal,
     modalTitle: state => state.modalTitle,
     modalCaller: state => state.modalCaller,
-    redisHealth: state => state.redisHealth
+    redisHealth: state => state.redisHealth,
+    psqlHealth: state => state.psqlHealth,
+    mongoHealth: state => state.mongoHealth
   },
   mutations: {
     setModal(state, payload){
@@ -29,6 +33,12 @@ export default new Vuex.Store({
     },
     setRedisHealth(state, payload){
       state.redisHealth = payload
+    },
+    setPsqlHealth(state, payload){
+      state.psqlHealth = payload
+    },
+    setMongoHealth(state, payload){
+      state.mongoHealth = payload
     }
   },
   actions: {
@@ -36,6 +46,18 @@ export default new Vuex.Store({
       http.get('/redis/health')
       .then(({data}) => {
         commit('setRedisHealth', data.redis_health)
+      })
+    },
+    setPsqlHealth({commit}) {
+      http.get('/postgres/health')
+      .then(({data}) => {
+        commit('setPsqlHealth', data.psql_health)
+      })
+    },
+    setMongoHealth({commit}){
+      http.get('/mongo/health')
+      .then(({data}) => {
+        commit('setMongoHealth', data.mongo_health)
       })
     }
   }

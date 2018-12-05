@@ -21,6 +21,7 @@ type DBActiveClient struct {
 type DBHealth struct {
 	PsqlHealth  PsqlHealth  `json:"psql_health,omitempty"`
 	RedisHealth RedisHealth `json:"redis_health,omitempty"`
+	MongoHealth MongoHealth `json:"mongo_health,omitempty"`
 }
 
 type PsqlHealth struct {
@@ -45,7 +46,7 @@ type RedisHealth struct {
 	MemoryUsage  string      `json:"memory_usage,omitempty"`
 	ExpiredKeys  string      `json:"expired_key,omitempty"`
 	EvictedKeys  string      `json:"evicted_key,omitempty"`
-	SlowlogCount int         `json:"slow_count"`
+	SlowlogCount int         `json:"slow_count,omitempty"`
 	MemoryStats  MemoryStats `json:"memory_stats,omitempty"`
 }
 
@@ -55,4 +56,12 @@ type MemoryStats struct {
 	StartupAllocated int64 `json:"startup_allocated,omitempty"`
 	PeakPercentage   int64 `json:"peak_percentage,omitempty"`
 	Fragmentation    int64 `json:"fragmentation,omitempty"`
+}
+
+type MongoHealth struct {
+	DBName              string  `json:"dbname,omitempty"`
+	AvailableCollection int     `json:"available_collection,omitempty"`
+	StorageSize         float64 `json:"storage_size,omitempty"`
+	Indexes             int     `json:"indexes,omitempty"`
+	DataSize            float64 `json:"data_size,omitempty"`
 }

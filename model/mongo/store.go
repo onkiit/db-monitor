@@ -43,8 +43,22 @@ func (m mongo) GetActiveClient(ctx context.Context) (*api.DBActiveClient, error)
 }
 
 func (m mongo) GetHealth(ctx context.Context) (*api.DBHealth, error) {
+	session := mgo.Session()
+	r := bson.M{}
+	if err := session.DB("test").Run("dbstats", &r); err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	res := &api.DBHealth{
+		MongoHealth: api.MongoHealth{
+			DBName:              r["db"].(string),
+			AvailableCollection: r["collections"].(int),
+			StorageSize:         r["storageSize"].(float64),
+			Indexes:             r["indexes"].(int),
+			DataSize:            r["dataSize"].(float64),
+		},
+	}
+	return res, nil
 }
 
 func New() api.Store {

@@ -5,6 +5,9 @@
         <span>dbcheck</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn flat medium fab @click="refresh()">
+        <v-icon>refresh</v-icon>
+      </v-btn>
     </v-toolbar>
     <v-content>
       <router-view/>
@@ -15,9 +18,9 @@
 <script>
 export default {
   name: 'App',
-  data () {
-    return {
-      
+  methods: {
+    refresh(){
+      window.location.reload()
     }
   }
 }

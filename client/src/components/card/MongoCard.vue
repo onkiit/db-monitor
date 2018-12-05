@@ -41,6 +41,7 @@ export default {
     created(){
         this.getVersion(),
         this.getActiveClient()
+        this.$store.dispatch('setMongoHealth')
     },
     methods: {
         getVersion(){

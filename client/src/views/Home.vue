@@ -18,6 +18,7 @@
       v-model="$store.state.modal"
       :overlay="false"
       max-width="500px"
+      persistent
       transition="dialog-transition">
       <v-card class="pa-2">
         <v-card-title primary-title class="title">
@@ -32,13 +33,13 @@
           <div v-else-if="caller=='postgres'">
             <psql-modal></psql-modal>
           </div>
-          <div v-else>
-
+          <div v-else-if="caller=='mongo'">
+            <mongo-modal></mongo-modal>
           </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="$store.commit('setModal', false)" color="default">close</v-btn>
+          <v-btn @click="$store.commit('setModal', false)" color="primary">close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -53,6 +54,7 @@
   
   import RedisModal from '../components/modal_content/RedisModal'
   import PsqlModal from '../components/modal_content/PsqlModal'
+  import MongoModal from '../components/modal_content/MongoModal'
   export default {
     components: {
       PsqlCard,
@@ -61,20 +63,8 @@
       RedisCard,
 
       RedisModal,
-      PsqlModal
-    },
-    data(){
-      return {
-        
-      }
-    },
-    methods: {
-      setModal(val){
-        this.modal = val
-      },
-      setTitle(val){
-        this.modalTitle = val
-      }
+      PsqlModal,
+      MongoModal
     },
     computed: {
       caller(){

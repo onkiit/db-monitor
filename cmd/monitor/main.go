@@ -16,43 +16,72 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/onkiit/db-monitor/controller/mongo"
+	_ "github.com/onkiit/db-monitor/controller/mysql"
 	_ "github.com/onkiit/db-monitor/controller/postgres"
 	_ "github.com/onkiit/db-monitor/controller/redis"
 	"github.com/onkiit/db-monitor/lib/db/mongo"
+	"github.com/onkiit/db-monitor/lib/db/mysql"
 	"github.com/onkiit/db-monitor/lib/db/psql"
 	"github.com/onkiit/db-monitor/lib/db/redis"
 	"github.com/onkiit/db-monitor/registry"
 )
 
 func openConnection() {
-	if err := psql.Open(config.C().Server.Databases.Postgres.URI); err != nil {
-		log.Println(err)
-		panic(err)
+	if config.C().Server.Databases.Postgres.Enable {
+		if err := psql.Open(config.C().Server.Databases.Postgres.URI); err != nil {
+			log.Println(err)
+			panic(err)
+		}
 	}
 
-	if err := redis.Connect(config.C().Server.Databases.Redis.URI); err != nil {
-		log.Println(err)
-		panic(err)
+	if config.C().Server.Databases.Redis.Enable {
+		if err := redis.Connect(config.C().Server.Databases.Redis.URI); err != nil {
+			log.Println(err)
+			panic(err)
+		}
 	}
 
-	if err := mongo.Open(config.C().Server.Databases.Mongo.URI); err != nil {
-		log.Println(err)
-		panic(err)
+	if config.C().Server.Databases.Mongo.Enable {
+		if err := mongo.Open(config.C().Server.Databases.Mongo.URI); err != nil {
+			log.Println(err)
+			panic(err)
+		}
+	}
+
+	if config.C().Server.Databases.Mysql.Enable {
+		if err := mysql.Open(config.C().Server.Databases.Mysql.URI); err != nil {
+			log.Println(err)
+			panic(err)
+		}
 	}
 }
 
 func closeConnection() {
-	if err := psql.Close(); err != nil {
-		log.Println(err)
-		panic(err)
+	if config.C().Server.Databases.Postgres.Enable {
+		if err := psql.Close(); err != nil {
+			log.Println(err)
+			panic(err)
+		}
 	}
 
-	if err := redis.Close(); err != nil {
-		log.Println(err)
-		panic(err)
+	if config.C().Server.Databases.Mysql.Enable {
+		if err := mysql.Close(); err != nil {
+			log.Println(err)
+			panic(err)
+		}
 	}
 
-	mongo.Close()
+	if config.C().Server.Databases.Redis.Enable {
+		if err := redis.Close(); err != nil {
+			log.Println(err)
+			panic(err)
+		}
+	}
+
+	if config.C().Server.Databases.Mongo.Enable {
+		mongo.Close()
+	}
+
 	log.Println("Database connection closed.")
 }
 
@@ -82,7 +111,23 @@ func run() {
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 	//register router
-	for _, router := range registry.Router() {
+	if config.C().Server.Databases.Postgres.Enable {
+		router := registry.Router(config.C().Server.Databases.Postgres.Name)
+		router.RegisterRoute(r)
+	}
+
+	if config.C().Server.Databases.Redis.Enable {
+		router := registry.Router(config.C().Server.Databases.Redis.Name)
+		router.RegisterRoute(r)
+	}
+
+	if config.C().Server.Databases.Mongo.Enable {
+		router := registry.Router(config.C().Server.Databases.Mongo.Name)
+		router.RegisterRoute(r)
+	}
+
+	if config.C().Server.Databases.Mysql.Enable {
+		router := registry.Router(config.C().Server.Databases.Mysql.Name)
 		router.RegisterRoute(r)
 	}
 

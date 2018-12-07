@@ -3,16 +3,21 @@
         <v-card-title>
             <span class="title">Mongo</span>
             <v-spacer></v-spacer>
-            <v-icon @click="modal()" color="primary">info</v-icon>
+            <v-icon @click="$store.getters['mongo/disabled'] ? '': modal()" :color="$store.getters['mongo/disabled'] ? 'grey lighten-2':'primary'">info</v-icon>
         </v-card-title>
         <v-card-text>
-            <v-layout row wrap>
+            <v-layout row wrap v-if="$store.getters['mongo/disabled']" align-center>
+                <v-flex xs12 justify-center>
+                    <span class="body-2">Mongo is disabled by server.</span>
+                </v-flex>
+            </v-layout>
+            <v-layout row wrap v-else>
                 <v-flex xs12>
                     <v-flex xs6>
                         <span class="body-2">Version</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption">{{ monitoringData.version }}</span>
+                        <span class="caption">{{ version }}</span>
                     </v-flex>
                 </v-flex>
                 <v-flex xs12>
@@ -20,7 +25,7 @@
                         <span class="body-2">Active Clients</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption"><strong>{{ monitoringData.active_client }}</strong> {{monitoringData.active_client > 2 ? "Active clients": "Active client"}}</span>
+                        <span class="caption"><strong>{{ active_client }}</strong> {{active_client > 2 ? "Active clients": "Active client"}}</span>
                     </v-flex>
                 </v-flex>
             </v-layout>
@@ -29,37 +34,35 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
-    data(){
-        return{
-            monitoringData: {
-                version: "",
-                active_client: 0
-            }
-        }
-    },
     created(){
-        this.getVersion(),
-        this.getActiveClient()
-        this.$store.dispatch('setMongoHealth')
+        this.setVersion
+        this.setActiveClient
+        this.setHealth
+    },
+    computed: {
+        ...mapGetters({
+            version: 'mongo/version',
+            active_client: 'mongo/active_client',
+            health: 'mongo/health'
+        }),
+        ...mapActions({
+            setVersion: 'mongo/setVersion',
+            setActiveClient: 'mongo/setActiveClient',
+            setHealth: 'mongo/setHealth'
+        })
     },
     methods: {
-        getVersion(){
-            this.$http.get("/mongo/version")
-            .then(({ data }) => {
-                this.monitoringData.version = data.version
-            })
-        },
-        getActiveClient(){
-            this.$http.get("/mongo/client")
-            .then(({ data }) => {
-                this.monitoringData.active_client = data.active_client
-            })
-        },
+        ...mapMutations({
+            setModal: 'setModal',
+            setModalTitle: 'setModalTitle',
+            setModalCaller: 'setModalCaller',
+        }),
         modal(){
-            this.$store.commit('setModal', true)
-            this.$store.commit('setModalTitle', 'Mongo Health Information')
-            this.$store.commit('setModalCaller', 'mongo')
+            this.setModal(true)
+            this.setModalTitle('Mongo Health Information')
+            this.setModalCaller('mongo')
         }
     }
 }

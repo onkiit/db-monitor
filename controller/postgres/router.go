@@ -19,5 +19,5 @@ func New() api.Router {
 }
 
 func init() {
-	registry.RegisterRouter(New())
+	registry.RegisterRouter("postgres", New())
 }

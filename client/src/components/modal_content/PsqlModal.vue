@@ -72,7 +72,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            health: 'psqlHealth'
+            health: 'postgres/health'
         }),
         table_length(){
             return this.health.table_information.length

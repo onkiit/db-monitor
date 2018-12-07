@@ -22,7 +22,7 @@
       transition="dialog-transition">
       <v-card class="pa-2">
         <v-card-title primary-title class="title">
-          {{ $store.state.modalTitle }}
+          {{ $store.getters.modal_title }}
           <v-spacer></v-spacer>
           <v-icon @click="$store.commit('setModal', false)">close</v-icon>
         </v-card-title>
@@ -68,7 +68,7 @@
     },
     computed: {
       caller(){
-        return this.$store.state.modalCaller
+        return this.$store.getters.modal_caller
       }
     }
   }

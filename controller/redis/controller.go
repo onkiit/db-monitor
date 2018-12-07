@@ -6,12 +6,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/onkiit/db-monitor/api"
 	"github.com/onkiit/db-monitor/lib/helper"
+	"github.com/onkiit/dbinfo"
 )
 
 type Controller struct {
-	store api.Store
+	store dbinfo.Store
 }
 
 func (c *Controller) GetVersion(w http.ResponseWriter, r *http.Request) {

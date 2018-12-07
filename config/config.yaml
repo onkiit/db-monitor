@@ -3,11 +3,21 @@ server:
   host: "127.0.0.1:8180"
   database:
     postgres:
+      name: postgres
+      enable: true
       uri: "postgresql://postgres:postgres@localhost/Coba"
     redis:
+      name: redis
+      enable: true
       uri: "localhost:6379"
-    mongo: 
+    mongo:
+      name: mongo
+      enable: true 
       uri: "localhost:27017"
+    mysql:
+      name: mysql
+      enable: true
+      uri: root@tcp(localhost:3306)/test
 
 client:
   host: "127.0.0.1:8080"

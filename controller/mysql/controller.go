@@ -1,4 +1,4 @@
-package mongo
+package mysql
 
 import (
 	"context"
@@ -43,12 +43,12 @@ func (c *Controller) GetActiveClient(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) GetHealth(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
 	defer cancel()
-	h, err := c.store.GetHealth(ctx)
+	ac, err := c.store.GetHealth(ctx)
 	if err != nil {
 		helper.ErrorResponse(w, http.StatusBadRequest, err)
 		log.Println(err)
 		return
 	}
 
-	helper.RespondWithJSON(w, http.StatusOK, h)
+	helper.RespondWithJSON(w, http.StatusOK, ac)
 }

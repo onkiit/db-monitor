@@ -16,18 +16,31 @@ type Database struct {
 	Postgres Postgres `json:"postgres" mapstructure:"postgres"`
 	Redis    Redis    `json:"redis" mapstructure:"redis"`
 	Mongo    Mongo    `json:"mongo" mapstructure:"mongo"`
+	Mysql    Mysql    `json:"mysql" mapstructure:"mysql"`
 }
 
 type Postgres struct {
-	URI string `json:"uri" mapstructure:"uri"`
+	Name   string `json:"name" mapstructure:"name"`
+	Enable bool   `json:"enable" mapstructure:"enable"`
+	URI    string `json:"uri" mapstructure:"uri"`
 }
 
 type Redis struct {
-	URI string `json:"uri" mapstructure:"uri"`
+	Name   string `json:"name" mapstructure:"name"`
+	Enable bool   `json:"enable" mapstructure:"enable"`
+	URI    string `json:"uri" mapstructure:"uri"`
 }
 
 type Mongo struct {
-	URI string `json:"uri" mapstructure:"uri"`
+	Name   string `json:"name" mapstructure:"name"`
+	Enable bool   `json:"enable" mapstructure:"enable"`
+	URI    string `json:"uri" mapstructure:"uri"`
+}
+
+type Mysql struct {
+	Name   string `json:"name" mapstructure:"name"`
+	Enable bool   `json:"enable" mapstructure:"enable"`
+	URI    string `json:"uri" mapstructure:"uri"`
 }
 
 type Client struct {

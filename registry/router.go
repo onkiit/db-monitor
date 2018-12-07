@@ -4,12 +4,12 @@ import (
 	"github.com/onkiit/db-monitor/api"
 )
 
-var r []api.Router
+var r = make(map[string]api.Router)
 
-func RegisterRouter(route api.Router) {
-	r = append(r, route)
+func RegisterRouter(name string, route api.Router) {
+	r[name] = route
 }
 
-func Router() []api.Router {
-	return r
+func Router(name string) api.Router {
+	return r[name]
 }

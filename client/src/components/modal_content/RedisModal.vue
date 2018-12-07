@@ -18,15 +18,15 @@ export default {
     data(){
         return {
             redisHealth: [
-                { title: "Available Keys", value: this.$store.state.redisHealth.available_key },
-                { title: "Expired Keys", value: this.$store.state.redisHealth.expired_key },
-                { title: "Evicted Keys", value: this.$store.state.redisHealth.evicted_key },
-                { title: "Memory Usage", value: this.$store.state.redisHealth.memory_usage },
-                { title: "SlowLog Count", value: this.$store.state.redisHealth.slow_count },
+                { title: "Available Keys", value: this.$store.getters['redis/health'].available_key },
+                { title: "Expired Keys", value: this.$store.getters['redis/health'].expired_key },
+                { title: "Evicted Keys", value: this.$store.getters['redis/health'].evicted_key },
+                { title: "Memory Usage", value: this.$store.getters['redis/health'].memory_usage },
+                { title: "SlowLog Count", value: this.$store.getters['redis/health'].slow_count },
                 { title: "Memory Stats", value: "" },
-                { title: " - Peak Allocated", value: this.$store.state.redisHealth.memory_stats.peak_allocated },
-                { title: " - Total Allowed", value: this.$store.state.redisHealth.memory_stats.total_allowed },
-                { title: " - Startup Allocated", value: this.$store.state.redisHealth.memory_stats.startup_allocated },
+                { title: " - Peak Allocated", value: this.$store.getters['redis/health'].memory_stats.peak_allocated },
+                { title: " - Total Allowed", value: this.$store.getters['redis/health'].memory_stats.total_allowed },
+                { title: " - Startup Allocated", value: this.$store.getters['redis/health'].memory_stats.startup_allocated },
             ]
         }
     },

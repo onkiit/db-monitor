@@ -3,16 +3,19 @@
         <v-card-title>
             <span class="title">Redis</span>
             <v-spacer></v-spacer>
-            <v-icon color="primary" @click="modal()">info</v-icon>
+            <v-icon @click="$store.getters['redis/disabled'] ? '': modal()" :color="$store.getters['redis/disabled'] ? 'grey lighten-2':'primary'">info</v-icon>
         </v-card-title>
         <v-card-text>
-           <v-layout row wrap>
+            <v-layout v-if="$store.getters['redis/disabled']" row wrap>
+                <span class="body-2">Redis is disabled by server.</span>
+            </v-layout>
+           <v-layout v-else row wrap>
                 <v-flex xs12>
                     <v-flex xs6>
                         <span class="body-2">Version</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption">{{ monitoringData.version }}</span>
+                        <span class="caption">{{ version }}</span>
                     </v-flex>
                 </v-flex>
                 <v-flex xs12>
@@ -20,7 +23,7 @@
                         <span class="body-2">Active Clients</span>
                     </v-flex>
                     <v-flex xs6>
-                        <span class="caption"><strong>{{ monitoringData.active_client }}</strong> {{monitoringData.active_client > 2 ? "Active clients": "Active client"}}</span>
+                        <span class="caption"><strong>{{ active_client }}</strong> {{active_client > 2 ? "Active clients": "Active client"}}</span>
                     </v-flex>
                 </v-flex>
             </v-layout>
@@ -29,37 +32,35 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
-    data(){
-        return{
-            monitoringData: {
-                version: "",
-                active_client: 0
-            },
-        }
-    },
     created(){
-        this.getVersion()
-        this.getActiveClient()
-        this.$store.dispatch("setRedisHealth")
+        this.setVersion
+        this.setActiveClient
+        this.setHealth
+    },
+    computed: {
+        ...mapGetters({
+            version: 'redis/version',
+            active_client: 'redis/active_client',
+            health: 'redis/health'
+        }),
+        ...mapActions({
+            setVersion: 'redis/setVersion',
+            setActiveClient: 'redis/setActiveClient',
+            setHealth: 'redis/setHealth'
+        })
     },
     methods: {
-        getVersion(){
-            this.$http.get("/redis/version")
-            .then(({data}) => {
-                this.monitoringData.version = data.version
-            })
-        },
-        getActiveClient(){
-            this.$http.get("/redis/client")
-            .then(({data}) => {
-                this.monitoringData.active_client = data.active_client
-            })
-        },
+        ...mapMutations({
+            setModal: 'setModal',
+            setModalTitle: 'setModalTitle',
+            setModalCaller: 'setModalCaller',
+        }),
         modal(){
-            this.$store.commit("setModal", true)
-            this.$store.commit("setModalTitle", "Redis Health Information")
-            this.$store.commit("setModalCaller", "redis")
+            this.setModal(true)
+            this.setModalTitle('Redis Health Information')
+            this.setModalCaller('redis')
         }
     }
 }

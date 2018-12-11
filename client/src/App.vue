@@ -10,12 +10,14 @@
       </v-btn>
     </v-toolbar>
     <v-content>
-      <router-view/>
+      <transition name="fade-transition" mode="out-in">
+        <router-view/>
+      </transition>
     </v-content>
     <v-snackbar
       :value="unavailable"
       color="error"
-      :timeout="2000"
+      :timeout="3000"
     >
       Server is not available
       <v-btn flat color="default" @click.native="value = false">Close</v-btn>

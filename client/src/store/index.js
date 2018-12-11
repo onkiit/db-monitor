@@ -5,6 +5,7 @@ import postgres from './modules/postgres.js'
 import redis from './modules/redis.js'
 import mongo from './modules/mongo.js'
 import mysql from './modules/mysql.js'
+import auth from './modules/auth.js'
 
 Vue.use(Vuex)
 
@@ -40,6 +41,7 @@ export const store = new Vuex.Store({
         postgres: postgres,
         redis: redis,
         mongo: mongo,
-        mysql: mysql
+        mysql: mysql,
+        auth: auth
     }
 })

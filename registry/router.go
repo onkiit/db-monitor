@@ -13,3 +13,7 @@ func RegisterRouter(name string, route api.Router) {
 func Router(name string) api.Router {
 	return r[name]
 }
+
+func UnregisterRouter(name string) {
+	delete(r, name)
+}

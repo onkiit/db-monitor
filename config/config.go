@@ -10,6 +10,7 @@ type Config struct {
 type Server struct {
 	Host      string   `json:"host" mapstructure:"host"`
 	Databases Database `json:"database" mapstructure:"database"`
+	Router    []string `json:"route" mapstructure:"route"`
 }
 
 type Database struct {
@@ -46,6 +47,10 @@ type Mysql struct {
 type Client struct {
 	Host        string   `json:"host" mapstructure:"host"`
 	AllowedCors []string `json:"allowed_cors" mapstructure:"allowed_cors"`
+}
+
+type Router struct {
+	Route []string `json:"route" mapstructure:"route`
 }
 
 func C(conf ...*Config) *Config {

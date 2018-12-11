@@ -19,6 +19,7 @@ import (
 	_ "github.com/onkiit/db-monitor/controller/mysql"
 	_ "github.com/onkiit/db-monitor/controller/postgres"
 	_ "github.com/onkiit/db-monitor/controller/redis"
+	_ "github.com/onkiit/db-monitor/controller/user"
 	"github.com/onkiit/db-monitor/lib/db/mongo"
 	"github.com/onkiit/db-monitor/lib/db/mysql"
 	"github.com/onkiit/db-monitor/lib/db/psql"
@@ -111,24 +112,25 @@ func run() {
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
 
 	//register router
-	if config.C().Server.Databases.Postgres.Enable {
-		router := registry.Router(config.C().Server.Databases.Postgres.Name)
+	for _, v := range config.C().Server.Router {
+		router := registry.Router(v)
 		router.RegisterRoute(r)
 	}
 
-	if config.C().Server.Databases.Redis.Enable {
-		router := registry.Router(config.C().Server.Databases.Redis.Name)
-		router.RegisterRoute(r)
+	if !config.C().Server.Databases.Postgres.Enable {
+		registry.UnregisterRouter(config.C().Server.Databases.Postgres.Name)
 	}
 
-	if config.C().Server.Databases.Mongo.Enable {
-		router := registry.Router(config.C().Server.Databases.Mongo.Name)
-		router.RegisterRoute(r)
+	if !config.C().Server.Databases.Redis.Enable {
+		registry.UnregisterRouter(config.C().Server.Databases.Redis.Name)
 	}
 
-	if config.C().Server.Databases.Mysql.Enable {
-		router := registry.Router(config.C().Server.Databases.Mysql.Name)
-		router.RegisterRoute(r)
+	if !config.C().Server.Databases.Mongo.Enable {
+		registry.UnregisterRouter(config.C().Server.Databases.Mongo.Name)
+	}
+
+	if !config.C().Server.Databases.Mysql.Enable {
+		registry.UnregisterRouter(config.C().Server.Databases.Mysql.Name)
 	}
 
 	logger := handlers.LoggingHandler(os.Stdout, r)

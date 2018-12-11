@@ -35,11 +35,21 @@ const actions = {
         .then(({data}) => {
             commit('setVersion', data.version)
         })
+        .catch(err => {
+            if(err){
+                commit('setDisabled', true)
+            }
+        })
     },
     setActiveClient({commit}) {
         http.get('/postgres/client')
         .then(({data}) => {
             commit('setActiveClient', data.active_client)
+        })
+        .catch(err => {
+            if(err){
+                commit('setDisabled', true)
+            }
         })
     },
     setHealth({commit}) {

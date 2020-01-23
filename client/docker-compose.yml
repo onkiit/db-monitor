@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  front-end: 
+    container_name: 'simple-db-monitor-frontend'
+    image: onkitdev/simple-db-monitor-fe
+    build: .
+    expose: 
+      - "8000"
+    ports: 
+      - "8000:80"
+    volumes:
+    - ./:/app

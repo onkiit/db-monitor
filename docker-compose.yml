@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  back-end: 
+    container_name: 'simple-db-monitor-backend'
+    image: 'onkitdev/simple-db-monitor-be'
+    build: .
+    expose: 
+      - "8081"
+    ports: 
+      - "8081:80"
+    volumes:
+      - ./:/app

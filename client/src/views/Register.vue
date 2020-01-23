@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-xs fill-height >
         <v-layout row wrap align-center justify-center>
-            <v-flex xs5 >
+            <v-flex xs12 sm7 md6 lg5 xl5>
                 <v-card class="text-xs-center">
                     <v-card-text>
                         <v-container grid-list-xs>
@@ -23,7 +23,7 @@
                                 <v-flex xs12 class="px-3">
                                     <v-text-field
                                         ref="username"
-                                        :rules="[rules.required]"
+                                        :rules="[rules.required, username]"
                                         name="username"
                                         label="Username"
                                         type="text"
@@ -34,7 +34,7 @@
                                 <v-flex xs12 class="px-3">
                                     <v-text-field
                                         ref="email"
-                                        :rules="[rules.required]"
+                                        :rules="[rules.required, rules.email, email]"
                                         name="email"
                                         label="Email"
                                         type="text"
@@ -45,7 +45,7 @@
                                 <v-flex xs12 class="px-3">
                                     <v-text-field
                                         ref="password"
-                                        :rules="[rules.required]"
+                                        :rules="[rules.required, rules.min]"
                                         name="password"
                                         label="Password"
                                         type="password"
@@ -83,16 +83,23 @@ export default {
             },
             rules: {
                 required: val => !!val || 'This field is Required.',
-                username: val => {
-                    this.$http.get('/user/checkuser', { username: val })
-                    .then(resp => {
-                        if(resp && resp.data.is_registered){
-                            return 'This username has already registered'
-                        }
-                    })
-                }
+                email: val => {
+                    const rgx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    return rgx.test(val) || 'Invalid email format.'
+                },
+                min: val => val.length >= 6 || 'Minimal 6 character.'
             },
-            hasError: false
+            hasError: false,
+            conflictUsername: false,
+            conflictEmail: false
+        }
+    },
+    computed: {
+        username(){
+            return !this.conflictUsername || 'Username already registered'
+        },
+        email(){
+            return !this.conflictEmail || 'Email already registered'
         }
     },
     methods: {
@@ -110,8 +117,15 @@ export default {
         register(){
             this.$http.post('/user/register', this.auth)
             .then(resp => {
-                if(resp && resp.status === 200){
+                if(resp){
                     this.$router.push('/login?success=true')
+                }
+            })
+            .catch(({ response }) => {
+                if(response.data.error.Constraint==='users_username_key'){
+                    this.conflictUsername = true
+                } else if(response.data.error.Constraint==='users_email_key'){
+                    this.conflictEmail = true
                 }
             })
         }

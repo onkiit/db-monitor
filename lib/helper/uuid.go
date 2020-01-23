@@ -1,14 +1,11 @@
 package helper
 
 import (
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 )
 
 func GenerateUUID() (string, error) {
-	uid, err := uuid.NewV4()
-	if err != nil {
-		return "", err
-	}
+	uid := uuid.NewV4()
 
 	return uid.String(), nil
 }

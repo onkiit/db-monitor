@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-xs fill-height >
         <v-layout row wrap align-center justify-center>
-            <v-flex xs5 >
+            <v-flex xs12 sm7 md6 lg5 xl5>
                 <v-alert
                     :value="alert"
                     type="success"

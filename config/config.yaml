@@ -5,7 +5,7 @@ server:
     postgres:
       name: postgres
       enable: true
-      uri: "postgresql://postgres:postgres@localhost/Coba"
+      uri: "postgresql://postgres:postgres@postgres-local:5433/db_monitor"
     redis:
       name: redis
       enable: true

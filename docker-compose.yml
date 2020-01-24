@@ -10,4 +10,31 @@ services:
     ports: 
       - "8081:80"
     volumes:
-      - ./:/app
+      - api:/app
+    depends_on:
+      - postgres-local
+    networks:
+      - local-network
+
+  postgres-local:
+    image: 'postgres:latest'
+    container_name: 'postgresql-db'
+    ports:
+      - "5433:5433"
+    environment:
+      DATABASE_HOST: ${POSTGRES_HOST}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:  
+      - db_postgres:/var/lib/postgresql/data
+    networks:
+      - local-network
+
+volumes:
+  api:
+  db_postgres:
+
+networks: 
+  local-network:
+    driver: bridge
